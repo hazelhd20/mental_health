@@ -10,18 +10,18 @@ class MeditationScreen extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        backgroundColor: Colors.white,
+        backgroundColor: DefaultColors.white,
         elevation: 0,
         leading: Image.asset('assets/menu_burger.png'),
         actions: [
           CircleAvatar(backgroundImage: AssetImage('assets/profile.png')),
-          SizedBox(width: 16),
+          const SizedBox(width: 16),
         ],
       ),
-      backgroundColor: Colors.white,
+      backgroundColor: DefaultColors.white,
       body: Container(
         padding: const EdgeInsets.all(16),
-        color: Colors.white,
+        color: DefaultColors.white,
         child: SingleChildScrollView(
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
@@ -30,12 +30,12 @@ class MeditationScreen extends StatelessWidget {
                 'Welcome back, Sabrina!',
                 style: Theme.of(context).textTheme.titleLarge,
               ),
-              SizedBox(height: 32),
+              const SizedBox(height: 32),
               Text(
                 'How are you feeling today?',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -61,24 +61,24 @@ class MeditationScreen extends StatelessWidget {
                   ),
                 ],
               ),
-              SizedBox(height: 24),
+              const SizedBox(height: 24),
               Text(
                 'Today\'s Task',
                 style: Theme.of(context).textTheme.titleMedium,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TaskCard(
                 title: 'Morning',
                 description: 'Let\'s open up to the thing that matters among the people',
                 color: DefaultColors.task1,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TaskCard(
                 title: 'Noon',
                 description: 'Let\'s open up to the thing that matters among the people',
                 color: DefaultColors.task2,
               ),
-              SizedBox(height: 16),
+              const SizedBox(height: 16),
               TaskCard(
                 title: 'Evening',
                 description: 'Let\'s open up to the thing that matters among the people',

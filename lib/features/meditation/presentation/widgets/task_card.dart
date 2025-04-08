@@ -16,7 +16,7 @@ class TaskCard extends StatelessWidget {
       ),
       child: Row(
         children: [
-          SizedBox(width: 5),
+          const SizedBox(width: 5),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +27,7 @@ class TaskCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                SizedBox(height: 8),
+                const SizedBox(height: 8),
                 Row(
                   children: [
                     Flexible(
@@ -36,7 +36,7 @@ class TaskCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ),
-                    SizedBox(height: 3),
+                    const SizedBox(height: 3),
                     Container(
                       padding: const EdgeInsets.all(3),
                       decoration: BoxDecoration(
