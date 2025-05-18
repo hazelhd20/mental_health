@@ -1,9 +1,10 @@
 import 'package:audio_video_progress_bar/audio_video_progress_bar.dart';
 import 'package:flutter/material.dart';
 import 'package:mental_health/core/theme.dart';
+import 'package:mental_health/features/music/domain/entities/song.dart';
 
 class MusicPlayerScreen extends StatelessWidget {
-  const MusicPlayerScreen({super.key});
+  const MusicPlayerScreen({super.key, required Song song});
 
   @override
   Widget build(BuildContext context) {
