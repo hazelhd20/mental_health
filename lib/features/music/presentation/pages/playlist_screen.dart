@@ -5,7 +5,6 @@ import 'package:mental_health/features/music/presentation/bloc/song_bloc.dart';
 import 'package:mental_health/features/music/presentation/bloc/song_state.dart';
 import 'package:mental_health/features/music/presentation/pages/music_player_screen.dart';
 
-
 class PlaylistScreen extends StatelessWidget {
   PlaylistScreen({Key? key}) : super(key: key);
   final List<Map<String, String>> songs = [
