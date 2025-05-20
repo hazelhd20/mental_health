@@ -6,29 +6,7 @@ import 'package:mental_health/features/music/presentation/bloc/song_state.dart';
 import 'package:mental_health/features/music/presentation/pages/music_player_screen.dart';
 
 class PlaylistScreen extends StatelessWidget {
-  PlaylistScreen({Key? key}) : super(key: key);
-  final List<Map<String, String>> songs = [
-    {
-      'title': 'Rain On Glass',
-      'artist': 'Rain On Glass',
-      'thumbnail': 'assets/child_with_dog.png',
-    },
-    {
-      'title': 'Gentle Breeze',
-      'artist': 'Soothing Sounds',
-      'thumbnail': 'assets/child_with_dog.png',
-    },
-    {
-      'title': 'Whispering Pines',
-      'artist': 'Nature Vibes',
-      'thumbnail': 'assets/child_with_dog.png',
-    },
-    {
-      'title': 'Ocean Waves Breeze',
-      'artist': 'Soothing Sounds',
-      'thumbnail': 'assets/child_with_dog.png',
-    }
-  ];
+  const PlaylistScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -52,7 +30,7 @@ class PlaylistScreen extends StatelessWidget {
                   itemBuilder: (context, index){
                     return ListTile(
                       leading: CircleAvatar(
-                        backgroundImage: AssetImage(songs[index]['thumbnail']!),
+                        backgroundImage: NetworkImage(state.songs[index].imageLink),
                       ),
                       trailing: Icon(Icons.arrow_forward_ios, size: 15),
                       title: Text(state.songs[index].title, style: Theme.of(context).textTheme.labelMedium,),

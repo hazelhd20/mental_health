@@ -6,7 +6,7 @@ import 'package:mental_health/features/music/domain/entities/song.dart';
 
 class MusicPlayerScreen extends StatefulWidget {
   final Song song;
-  MusicPlayerScreen({Key? key, required this.song}) : super(key: key);
+  const MusicPlayerScreen({super.key, required this.song});
 
   @override
   State<MusicPlayerScreen> createState() => _MusicPlayerScreenState();
@@ -85,11 +85,33 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             // artwork
             ClipRRect(
               borderRadius: BorderRadius.circular(20),
-              child: Image.asset(
-                'assets/child_with_dog.png',
+              child: Image.network(
+                widget.song.imageLink,
                 height: 300,
                 width: double.infinity,
                 fit: BoxFit.cover,
+                loadingBuilder: (context, child, loadingProgress) {
+                  if (loadingProgress == null) return child;
+                  return SizedBox(
+                    height: 300,
+                    child: Center(
+                      child: CircularProgressIndicator(
+                        color: DefaultColors.pink,
+                      ),
+                    ),
+                  );
+                },
+                errorBuilder:
+                    (context, error, stackTrace) => SizedBox(
+                      height: 300,
+                      child: Center(
+                        child: Icon(
+                          Icons.broken_image,
+                          size: 100,
+                          color: Colors.grey,
+                        ),
+                      ),
+                    ),
               ),
             ),
             const SizedBox(height: 16,),
@@ -98,80 +120,122 @@ class _MusicPlayerScreenState extends State<MusicPlayerScreen> {
             const Spacer(),
             StreamBuilder<Duration>(
               stream: _audioPlayer.positionStream,
-              builder: (context, snapshot){
+              builder: (context, snapshot) {
                 final position = snapshot.data ?? Duration.zero;
                 final total = _audioPlayer.duration ?? Duration.zero;
-                return ProgressBar(
-                    progress: position,
-                    total: total,
-                    baseBarColor: DefaultColors.lightpink,
-                    thumbColor: DefaultColors.pink,
-                    progressBarColor: DefaultColors.pink,
-                    onSeek: (duration) {
-                      _audioPlayer.seek(duration);
-                    },
-                  );
+
+                String formatDuration(Duration duration) {
+                  String twoDigits(int n) => n.toString().padLeft(2, '0');
+                  final minutes = twoDigits(duration.inMinutes.remainder(60));
+                  final seconds = twoDigits(duration.inSeconds.remainder(60));
+                  return "$minutes:$seconds";
+                }
+
+                return Column(
+                  children: [
+                    ProgressBar(
+                      progress: position,
+                      total: total,
+                      baseBarColor: DefaultColors.lightpink,
+                      thumbColor: DefaultColors.pink,
+                      progressBarColor: DefaultColors.pink,
+                      onSeek: (duration) {
+                        _audioPlayer.seek(duration);
+                      },
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Text(
+                          formatDuration(position),
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                        Text(
+                          formatDuration(total),
+                          style: Theme.of(context).textTheme.labelSmall,
+                        ),
+                      ],
+                    ),
+                  ],
+                );
               },
             ),
             Row(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 IconButton(
-                  onPressed: (){},
-                  icon: Icon(Icons.shuffle, color: DefaultColors.pink,)
+                  onPressed: () {},
+                  icon: Icon(Icons.shuffle, color: DefaultColors.pink),
                 ),
                 IconButton(
                   onPressed: seekBackward,
-                  icon: Icon(Icons.skip_previous, color: DefaultColors.pink,)
+                  icon: Icon(Icons.skip_previous, color: DefaultColors.pink),
                 ),
                 StreamBuilder(
-                    stream: _audioPlayer.playerStateStream,
-                    builder: (context, snapshot){
-                      final playerState = snapshot.data;
-                      final processingState = playerState?.processingState ?? ProcessingState.idle;
-                      final playing = playerState?.playing ?? false;
+                  stream: _audioPlayer.playerStateStream,
+                  builder: (context, snapshot) {
+                    final playerState = snapshot.data;
+                    final processingState =
+                        playerState?.processingState ?? ProcessingState.idle;
+                    final playing = playerState?.playing ?? false;
 
-                      if(processingState == ProcessingState.loading || processingState == ProcessingState.buffering){
-                        return Container(
-                          margin: EdgeInsets.all(8),
-                          width: 50,
-                          height: 50,
-                          child: CircularProgressIndicator(color: DefaultColors.pink,),
-                        );
-                      }
-                      else if(!playing){
-                        return IconButton(
-                            iconSize: 80,
-                            onPressed: togglePlayPause,
-                            icon: Icon(Icons.play_circle_filled, color: DefaultColors.pink,)
-                        );
-                      }else if(processingState != ProcessingState.completed){
-                        return IconButton(
-                            iconSize: 80,
-                            onPressed: togglePlayPause,
-                            icon: Icon(Icons.pause_circle_filled, color: DefaultColors.pink,)
-                        );
-                      } else {
-                        return IconButton(
-                            iconSize: 80,
-                            onPressed: seekRestart,
-                            icon: Icon(Icons.replay_circle_filled, color: DefaultColors.pink,)
-                        );
-                      }
+                    if (processingState == ProcessingState.loading ||
+                        processingState == ProcessingState.buffering) {
+                      return Container(
+                        margin: EdgeInsets.all(8),
+                        width: 50,
+                        height: 50,
+                        child: CircularProgressIndicator(
+                          color: DefaultColors.pink,
+                        ),
+                      );
+                    } else if (!playing) {
+                      return IconButton(
+                        iconSize: 80,
+                        onPressed: togglePlayPause,
+                        icon: Icon(
+                          Icons.play_circle_filled,
+                          color: DefaultColors.pink,
+                        ),
+                      );
+                    } else if (processingState != ProcessingState.completed) {
+                      return IconButton(
+                        iconSize: 80,
+                        onPressed: togglePlayPause,
+                        icon: Icon(
+                          Icons.pause_circle_filled,
+                          color: DefaultColors.pink,
+                        ),
+                      );
+                    } else {
+                      return IconButton(
+                        iconSize: 80,
+                        onPressed: seekRestart,
+                        icon: Icon(
+                          Icons.replay_circle_filled,
+                          color: DefaultColors.pink,
+                        ),
+                      );
                     }
+                  },
                 ),
                 IconButton(
                   onPressed: seekForward,
-                  icon: Icon(Icons.skip_next, color: DefaultColors.pink,)
+                  icon: Icon(Icons.skip_next, color: DefaultColors.pink),
                 ),
                 IconButton(
                   onPressed: toggleLoop,
-                  icon: Icon(isLooping ? Icons.repeat_one : Icons.repeat, color: DefaultColors.pink,)
-                )
+                  icon: Icon(
+                    isLooping ? Icons.repeat_one : Icons.repeat,
+                    color: DefaultColors.pink,
+                  ),
+                ),
               ],
-            )
+            ),
+            const SizedBox(height: 32),
           ],
-        )
+        ),
       ),
     );
   }

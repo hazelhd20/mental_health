@@ -1,6 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:mental_health/core/theme.dart';
+import 'package:mental_health/features/meditation/data/datasources/meditation_remote_datasource.dart';
+import 'package:mental_health/features/meditation/data/repositories/meditation_repository_impl.dart';
+import 'package:mental_health/features/meditation/domain/usecases/get_daily_quote.dart';
+import 'package:mental_health/features/meditation/domain/usecases/get_mood_message.dart';
+import 'package:mental_health/features/meditation/presentation/bloc/daily_quote/daily_quote_bloc.dart';
+import 'package:mental_health/features/meditation/presentation/bloc/daily_quote/daily_quote_event.dart';
+import 'package:mental_health/features/meditation/presentation/bloc/mood_message/mood_message_bloc.dart';
 import 'package:mental_health/features/music/data/datasources/song_remote_datasource.dart';
 import 'package:mental_health/features/music/data/repository/song_repository_impl.dart';
 import 'package:mental_health/features/music/domain/usecases/get_all_songs.dart';
@@ -17,31 +24,53 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     return MultiBlocProvider(
-      providers: [
-        BlocProvider(
-          create: (_) => NavigationBloc(),
-        ),
-        BlocProvider(create: (context) => SongBloc(
-          getAllSongs: GetAllSongs(
-            repository: SongRepositoryImpl(
-              remoteDataSource: SongRemoteDataSourceImpl(
-                client: http.Client(),
+        providers: [
+          BlocProvider(
+            create: (_) => NavigationBloc(),
+          ),
+          BlocProvider(
+              create: (context) => SongBloc(
+                getAllSongs: GetAllSongs(
+                  repository: SongRepositoryImpl(
+                    remoteDataSource: SongRemoteDataSourceImpl(
+                      client: http.Client()
+                    )
+                  )
                 )
+              )..add(FetchSongs())
+          ),
+          BlocProvider(
+            create: (context)=>DailyQuoteBloc(
+                getDailyQuote: GetDailyQuote(
+                  repository: MeditationRepositoryImpl(
+                    remoteDataSource: MeditationRemoteDataSourceImpl(
+                        client: http.Client()
+                    )
+                  )
+                )
+            )..add(FetchDailyQuote()),
+          ),
+          BlocProvider(
+              create: (context)=>MoodMessageBloc(
+                  getMoodMessage: GetMoodMessage(
+                    repository: MeditationRepositoryImpl(
+                      remoteDataSource: MeditationRemoteDataSourceImpl(
+                        client: http.Client()
+                      )
+                    )
+                  )
               )
-            )
-          )..add(FetchSongs()),
-        ),
-      ],
-      child: MaterialApp(
-        title: 'Flutter Demo',
-        theme: AppTheme.lightTheme,
-        debugShowCheckedModeBanner: false,
-        home: HomeScreen(),
-      ),
+          )
+        ],
+        child: MaterialApp(
+          title: 'Flutter Demo',
+          theme: AppTheme.lightTheme,
+          debugShowCheckedModeBanner: false,
+          home: HomeScreen(),
+        )
     );
   }
 }

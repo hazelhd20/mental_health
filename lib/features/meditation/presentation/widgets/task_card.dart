@@ -4,6 +4,7 @@ class TaskCard extends StatelessWidget {
   final String title;
   final String description;
   final Color color;
+
   const TaskCard({super.key, required this.title, required this.description, required this.color});
 
   @override
@@ -12,11 +13,11 @@ class TaskCard extends StatelessWidget {
       padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(12),
+        borderRadius: BorderRadius.circular(12)
       ),
       child: Row(
         children: [
-          const SizedBox(width: 5),
+          SizedBox(width: 5,),
           Expanded(
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -27,7 +28,7 @@ class TaskCard extends StatelessWidget {
                     fontWeight: FontWeight.bold,
                   ),
                 ),
-                const SizedBox(height: 8),
+                SizedBox(height: 8,),
                 Row(
                   children: [
                     Flexible(
@@ -36,20 +37,20 @@ class TaskCard extends StatelessWidget {
                         style: Theme.of(context).textTheme.labelSmall,
                       ),
                     ),
-                    const SizedBox(height: 3),
-                    Container(
-                      padding: const EdgeInsets.all(3),
-                      decoration: BoxDecoration(
-                        color: Colors.grey[200],
-                        borderRadius: BorderRadius.circular(50),
-                      ),
-                      child: Icon(Icons.arrow_forward_ios),
-                    )
+                    SizedBox(height: 3),
+                    // Container(
+                    //   padding: EdgeInsets.all(3),
+                    //   decoration: BoxDecoration(
+                    //     color: Colors.grey[200],
+                    //     borderRadius: BorderRadius.circular(50)
+                    //   ),
+                    //   child: Icon(Icons.arrow_forward_ios),
+                    // )
                   ],
-                ),
+                )
               ],
             ),
-          ),
+          )
         ],
       ),
     );

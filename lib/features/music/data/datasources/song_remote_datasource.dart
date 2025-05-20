@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart' as http;
-import 'package:mental_health/features/music/data/models/SongModel.dart';
+import 'package:mental_health/features/music/data/models/song_model.dart';
 
 abstract class SongRemoteDataSource {
   Future<List<SongModel>> getAllSongs();
@@ -14,7 +14,7 @@ class SongRemoteDataSourceImpl implements SongRemoteDataSource {
 
   @override
   Future<List<SongModel>> getAllSongs() async {
-    final response = await client.get(Uri.parse('http://10.0.2.2:6000/songs/all'));
+    final response = await client.get(Uri.parse('https://mentalhealth-ohrl.onrender.com/songs/all'));
 
     if(response.statusCode == 200){
       List jsonResponse = json.decode(response.body);
